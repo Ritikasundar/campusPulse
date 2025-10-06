@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import ComplaintForm from '../components/ComplaintForm';
-import { useDispatch } from 'react-redux';
-import { updateComplaint } from '../store/complaintsSlice';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
 
 const EditComplaint = () => {
   const { id } = useParams();
-  const [initial, setInitial] = useState(null);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [complaint, setComplaint] = useState({ title: '', description: '' });
 
-  // EditComplaint.jsx
-useEffect(() => {
-  axios.get(`https://campuspulse.onrender.com/api/complaints/${id}`)
-    .then(res => setComplaint(res.data))
-    .catch(err => {
-      if (err.response && err.response.status === 404) {
-        alert('Complaint not found');
-        navigate('/'); // go back to home
-      } else {
+  useEffect(() => {
+    api.get(`/complaints/${id}`)
+      .then(res => setComplaint(res.data))
+      .catch(err => {
         console.error(err);
-      }
-    });
-}, [id]);
+        if (err.response && err.response.status === 404) {
+          alert('Complaint not found');
+          navigate('/');
+        }
+      });
+  }, [id, navigate]);
 
+  const handleChange = (e) => {
+    setComplaint({ ...complaint, [e.target.name]: e.target.value });
+  };
 
-  if (!initial) return <p>Loading...</p>;
-
-  const handleSubmit = async (data) => {
-    await dispatch(updateComplaint({ id, data }));
-    navigate('/'); // ✅ After submit, go to Home page
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.put(`/complaints/${id}`, complaint)
+      .then(res => {
+        alert('Complaint updated successfully');
+        navigate('/');
+      })
+      .catch(err => console.error(err));
   };
 
   return (
-    <div>
-      <h1>Edit Complaint</h1>
-      {/* ComplaintForm handles e.preventDefault internally */}
-      <ComplaintForm initial={initial} onSubmit={handleSubmit} />
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input name="title" value={complaint.title} onChange={handleChange} required />
+      <textarea name="description" value={complaint.description} onChange={handleChange} required />
+      <button type="submit">Update Complaint</button>
+    </form>
   );
 };
 

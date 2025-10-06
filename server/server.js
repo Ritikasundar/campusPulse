@@ -1,4 +1,4 @@
-require('dotenv').config(); // load .env
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,8 +6,13 @@ const complaintsRouter = require('./routes/complaints');
 
 const app = express();
 
-// Middleware
-app.use(cors({ origin: 'https://campus-pulse-red.vercel.app', credentials: true }));
+// CORS: allow your deployed frontend domain
+app.use(cors({
+  origin: 'https://campus-pulse-red.vercel.app', // your Vercel frontend
+  credentials: true
+}));
+
+// JSON middleware
 app.use(express.json());
 
 // MongoDB connection

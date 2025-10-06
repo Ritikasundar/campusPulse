@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-// Complaint schema
+// Schema
 const complaintSchema = new mongoose.Schema({
   title: String,
   description: String,
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET complaint by ID
+// GET by ID
 router.get('/:id', async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id);
@@ -49,7 +49,7 @@ router.put('/:id', async (req, res) => {
     const updatedComplaint = await Complaint.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true } // return updated document
+      { new: true }
     );
     if (!updatedComplaint) return res.status(404).json({ message: 'Complaint not found' });
     res.json(updatedComplaint);
