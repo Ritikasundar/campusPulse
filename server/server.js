@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // load .env locally if needed
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,19 +6,11 @@ const complaintsRouter = require('./routes/complaints');
 
 const app = express();
 
-// ---------- CORS Configuration ----------
-const corsOptions = {
-  origin: 'https://campus-pulse-red.vercel.app', // Your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-// ---------- Middleware ----------
+app.use(cors({ origin: 'https://campus-pulse-red.vercel.app' }));
 app.use(express.json());
 
-// ---------- MongoDB Connection ----------
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/campusPulse';
+const MONGODB_URI = process.env.MONGODB_URI; // ✅ must read from env
+console.log('Mongo URI:', MONGODB_URI); // debug
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected'))
@@ -27,14 +19,9 @@ mongoose.connect(MONGODB_URI)
     process.exit(1);
   });
 
-// ---------- Routes ----------
 app.use('/api/complaints', complaintsRouter);
 
-// ---------- Health Check ----------
-app.get('/', (req, res) => {
-  res.send('CampusPulse Backend is running!');
-});
+app.get('/', (req, res) => res.send('CampusPulse backend running!'));
 
-// ---------- Start Server ----------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
