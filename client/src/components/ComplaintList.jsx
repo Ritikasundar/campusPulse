@@ -18,7 +18,7 @@ const ComplaintList = () => {
         <div key={c._id}>
           <h3>{c.title}</h3>
           <p>{c.description}</p>
-          <Link to={`/edit/${c._id}`}>Edit</Link>
+          <Link to={`/complaints/${c._id}/edit`}>Edit</Link>
           <button onClick={() => dispatch(deleteComplaint(c._id))}>Delete</button>
         </div>
       ))}
