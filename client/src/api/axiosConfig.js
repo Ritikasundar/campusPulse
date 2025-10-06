@@ -1,6 +1,7 @@
-// client/src/api/axiosConfig.js
 import axios from 'axios';
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-export default axios.create({
-  baseURL: API_URL
+
+const api = axios.create({
+  baseURL: 'https://campuspulse.onrender.com', // Render backend URL
 });
+
+export default api;

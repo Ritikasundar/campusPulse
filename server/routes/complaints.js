@@ -1,63 +1,58 @@
-// server/routes/complaints.js
 const express = require('express');
 const router = express.Router();
 const Complaint = require('../models/Complaint');
 
-// Create complaint
-router.post('/', async (req, res) => {
-  try {
-    const c = new Complaint(req.body);
-    const saved = await c.save();
-    res.status(201).json(saved);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Read all complaints
+// ---------- GET all complaints ----------
 router.get('/', async (req, res) => {
   try {
-    // optional query params: status, priority
-    const filter = {};
-    if (req.query.status) filter.status = req.query.status;
-    if (req.query.priority) filter.priority = req.query.priority;
-
-    const list = await Complaint.find(filter).sort({ createdAt: -1 });
-    res.json(list);
+    const complaints = await Complaint.find();
+    res.json(complaints);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
-// Read single complaint
+// ---------- GET complaint by ID ----------
 router.get('/:id', async (req, res) => {
   try {
-    const c = await Complaint.findById(req.params.id);
-    if (!c) return res.status(404).json({ error: 'Complaint not found' });
-    res.json(c);
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
+    res.json(complaint);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
-// Update complaint
+// ---------- CREATE new complaint ----------
+router.post('/', async (req, res) => {
+  const complaint = new Complaint(req.body);
+  try {
+    const newComplaint = await complaint.save();
+    res.status(201).json(newComplaint);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// ---------- UPDATE complaint ----------
 router.put('/:id', async (req, res) => {
   try {
-    const updated = await Complaint.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
+    const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedComplaint) return res.status(404).json({ message: 'Complaint not found' });
+    res.json(updatedComplaint);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
-// Delete complaint
+// ---------- DELETE complaint ----------
 router.delete('/:id', async (req, res) => {
   try {
-    await Complaint.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Deleted' });
+    const deleted = await Complaint.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Complaint not found' });
+    res.json({ message: 'Complaint deleted' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
