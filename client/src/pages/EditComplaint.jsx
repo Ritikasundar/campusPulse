@@ -11,10 +11,20 @@ const EditComplaint = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // fetch the existing complaint details
-    api.get(`/complaints/${id}`).then(res => setInitial(res.data));
-  }, [id]);
+  // EditComplaint.jsx
+useEffect(() => {
+  axios.get(`https://campuspulse.onrender.com/api/complaints/${id}`)
+    .then(res => setComplaint(res.data))
+    .catch(err => {
+      if (err.response && err.response.status === 404) {
+        alert('Complaint not found');
+        navigate('/'); // go back to home
+      } else {
+        console.error(err);
+      }
+    });
+}, [id]);
+
 
   if (!initial) return <p>Loading...</p>;
 
