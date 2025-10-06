@@ -5,8 +5,9 @@ import api from '../api/axiosConfig';
 const EditComplaint = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [complaint, setComplaint] = useState({ title: '', description: '' });
+  const [complaint, setComplaint] = useState({});
 
+  // Fetch complaint details
   useEffect(() => {
     api.get(`/complaints/${id}`)
       .then(res => setComplaint(res.data))
@@ -19,10 +20,13 @@ const EditComplaint = () => {
       });
   }, [id, navigate]);
 
+  // Handle form field changes dynamically
   const handleChange = (e) => {
-    setComplaint({ ...complaint, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setComplaint(prev => ({ ...prev, [name]: value }));
   };
 
+  // Submit updated complaint
   const handleSubmit = (e) => {
     e.preventDefault();
     api.put(`/complaints/${id}`, complaint)
@@ -30,15 +34,53 @@ const EditComplaint = () => {
         alert('Complaint updated successfully');
         navigate('/');
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        alert('Failed to update complaint');
+      });
+  };
+
+  // Render form fields dynamically based on object keys
+  const renderFields = () => {
+    return Object.keys(complaint).map(key => {
+      if (['_id', '__v', 'createdAt', 'updatedAt'].includes(key)) return null;
+      if (key === 'description') {
+        return (
+          <div key={key} style={{ marginBottom: '10px' }}>
+            <label>{key}:</label>
+            <textarea
+              name={key}
+              value={complaint[key]}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', height: '80px' }}
+            />
+          </div>
+        );
+      }
+      return (
+        <div key={key} style={{ marginBottom: '10px' }}>
+          <label>{key}:</label>
+          <input
+            name={key}
+            value={complaint[key]}
+            onChange={handleChange}
+            required
+            style={{ width: '100%' }}
+          />
+        </div>
+      );
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="title" value={complaint.title} onChange={handleChange} required />
-      <textarea name="description" value={complaint.description} onChange={handleChange} required />
-      <button type="submit">Update Complaint</button>
-    </form>
+    <div>
+      <h2>Edit Complaint</h2>
+      <form onSubmit={handleSubmit}>
+        {renderFields()}
+        <button type="submit">Update Complaint</button>
+      </form>
+    </div>
   );
 };
 
