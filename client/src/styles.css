@@ -1,0 +1,168 @@
+/* Global styles */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9ff;
+  color: #333;
+}
+
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Navbar */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #5e60ce;
+  color: white;
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.nav a:hover {
+  opacity: 0.8;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Headings */
+h1, h2 {
+  color: #3f3d56;
+}
+
+/* Complaint list */
+.complaint-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.complaint-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #f0f1ff;
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.complaint-item:hover {
+  background: #e3e4fb;
+}
+
+.complaint-item .meta {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button, 
+.actions a {
+  background: #5e60ce;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.actions button:hover, 
+.actions a:hover {
+  background: #4a4cc7;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  color: #333;
+}
+
+input, textarea, select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  background-color: #5e60ce;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #4a4cc7;
+}
+
+/* Complaint Details */
+.complaint-details {
+  background: #f5f5ff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.complaint-details p {
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
